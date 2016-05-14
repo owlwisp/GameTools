@@ -2,9 +2,9 @@
 #include <vector>
 #include <cstdlib>
 
-struct AStarNode
+struct ASNode
 {
-    AStarNode() : _i(-1)
+    ASNode() : _i(-1)
                 , _j(-1)
                 , _f(0)
                 , _h(0)
@@ -13,7 +13,7 @@ struct AStarNode
 
     }
 
-    AStarNode(int i,int j)  : _i(i)
+    ASNode(int i,int j)  : _i(i)
                             , _j(j)
                             , _f(0)
                             , _h(0)
@@ -22,7 +22,7 @@ struct AStarNode
 
     }
 
-    bool operator==(const AStarNode &another)const{
+    bool operator==(const ASNode &another)const{
         return _i == another._i && _j == another._j;
     }
     
@@ -30,7 +30,7 @@ struct AStarNode
     int _i;
     int _j;
     //父结点
-    AStarNode * _parentNode;
+    ASNode * _parentNode;
     //从开始结点移动到此结点的移动消费值
     int _g;
     //从此节点移动到结束节点的移动消费值（如曼哈顿方法产生的估值）
@@ -65,9 +65,9 @@ public:
     void printStar();
     //打印寻找好的路径
     void printPath( std::vector
-                   <AStarNode> &path );
+                   <ASNode> &path );
     //寻找路径
-    std::vector<AStarNode> findPath( int src_i,int src_j,int dest_i,int dest_j);
+    std::vector<ASNode> findPath( int src_i,int src_j,int dest_i,int dest_j);
     
 private:
     //私有成员函数
@@ -75,7 +75,7 @@ private:
     void initData();
 	void initMap();
     
-	std::vector<AStarNode> createPath( AStarNode *nearNode ,int src_i,int src_j);
+	std::vector<ASNode> createPath( ASNode *nearNode ,int src_i,int src_j);
     
 public:
     virtual ~AStar();
@@ -93,11 +93,11 @@ private:
     int ** _map;
     
     //开启结点列表
-	std::vector<AStarNode*> _openList;
+	std::vector<ASNode*> _openList;
     //关闭结点列表
-    std::vector<AStarNode*> _closeList;
+    std::vector<ASNode*> _closeList;
     //结点缓冲
-	std::vector<std::vector<AStarNode> > _cacheArray;
+	std::vector<std::vector<ASNode> > _cacheArray;
     
     //是否开启近似结点
     bool _isUseApproximateDest;
@@ -164,13 +164,13 @@ void AStar::initMap()
     _closeList.clear();
     _cacheArray.clear();
     
-    _cacheArray = vector< vector< AStarNode > >(_height);
+    _cacheArray = vector< vector< ASNode > >(_height);
     for (unsigned int i = 0; i< _cacheArray.size(); i++)
     {
-        _cacheArray[i] = vector< AStarNode >(_width);
+        _cacheArray[i] = vector< ASNode >(_width);
         for(unsigned int j = 0; j< _cacheArray[i].size(); j++)
         {
-            _cacheArray[i][j] = AStarNode(i,j);
+            _cacheArray[i][j] = ASNode(i,j);
         }
     }
 }
@@ -201,7 +201,7 @@ void AStar::printStar()
 
 
 
-void AStar::printPath( vector<AStarNode> &path )
+void AStar::printPath( vector<ASNode> &path )
 {
     if (path.empty())
     {
@@ -213,7 +213,7 @@ void AStar::printPath( vector<AStarNode> &path )
     {
         for (int j = 0; j < _width; j++)
         {
-            if (count(path.begin(),path.end(),AStarNode(i,j)))
+            if (count(path.begin(),path.end(),ASNode(i,j)))
             {
                 printf(",");
             }
@@ -248,7 +248,7 @@ void AStar::printPath( vector<AStarNode> &path )
 
 
 
-vector<AStarNode> AStar::findPath( int src_i,int src_j,int dest_i,int dest_j )
+vector<ASNode> AStar::findPath( int src_i,int src_j,int dest_i,int dest_j )
 {
     initMap();
     
@@ -271,7 +271,7 @@ vector<AStarNode> AStar::findPath( int src_i,int src_j,int dest_i,int dest_j )
         }
         
         // a) 寻找开启列表中F值最低的格子。我们称它为当前格。
-        AStarNode *currentNode = _openList[0];
+        ASNode *currentNode = _openList[0];
         for (unsigned int i = 1; i < _openList.size();i++)
         {
             if( _openList[i]->_f < currentNode->_f)
@@ -370,7 +370,7 @@ vector<AStarNode> AStar::findPath( int src_i,int src_j,int dest_i,int dest_j )
         // 开启使用近似点目标点
         if (_isUseApproximateDest)
         {
-            AStarNode * approximateDestNode = _closeList[0];
+            ASNode * approximateDestNode = _closeList[0];
             for (unsigned int i = 1; i < _closeList.size(); i++)
             {
                 if (approximateDestNode->_h == 0 && _closeList[i]->_h > 0)
@@ -388,7 +388,7 @@ vector<AStarNode> AStar::findPath( int src_i,int src_j,int dest_i,int dest_j )
         }
         else
         {
-            return vector<AStarNode>(); 
+            return vector<ASNode>(); 
         }       
     }
     else
@@ -398,13 +398,13 @@ vector<AStarNode> AStar::findPath( int src_i,int src_j,int dest_i,int dest_j )
     
 }
 
-vector<AStarNode> AStar::createPath( AStarNode *nearNode ,int src_i,int src_j)
+vector<ASNode> AStar::createPath( ASNode *nearNode ,int src_i,int src_j)
 {
-    vector<AStarNode> path;
+    vector<ASNode> path;
     
     path.push_back(*nearNode);
     
-    AStarNode *nextNode=nearNode->_parentNode;
+    ASNode *nextNode=nearNode->_parentNode;
     
     do 
     {
@@ -429,9 +429,9 @@ vector<AStarNode> AStar::createPath( AStarNode *nearNode ,int src_i,int src_j)
 int main(){
     int **map = new int*[10 * 10];
     memset(map, 0, 10 * 10);
-    
+
     AStar* astar = AStar::create(map,10,10);
-    vector<AStarNode> path = astar->findPath(0,1,9,9);
+    vector<ASNode> path = astar->findPath(0,1,9,9);
     astar->printPath(path);
     return 1;
 }
