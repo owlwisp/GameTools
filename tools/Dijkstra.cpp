@@ -1,10 +1,3 @@
-//
-//  CDijkstra.cpp
-//
-//  Created by owlwisp on 14-5-31.
-//
-//
-
 #include <iostream>
 #include <vector>
 using namespace std;

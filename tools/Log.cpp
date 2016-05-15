@@ -1,10 +1,3 @@
-//
-//  Log.cpp
-//
-//  Created by owlwisp on 15-5-31.
-//
-//
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -23,7 +16,7 @@ enum LoggingLevel {
     LOGLEVEL_TRACE = 6
 };
 
-
+int64_t GetCurrentTime();
 void SetLoggingLevel(int level);
 int GetLoggingLevel();
 
@@ -36,22 +29,6 @@ void InfoLog(const char* format, ...);
 void ErrorLog(const char* format, ...);
 void FatalLog(const char* format, ...);
 
-
-int64_t GetCurrentTime(){
-    int64_t current_time = 0;
-#if __cplusplus >= 201103 || _MSC_VER >= 1800
-    auto tp = std::chrono::system_clock::from_time_t(0);
-    auto now = std::chrono::system_clock::now();
-    auto d = std::chrono::duration_cast<std::chrono::milliseconds>(now - tp);
-    current_time = d.count();
-#else
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    current_time = (int64_t)tv.tv_sec * 1000 + tv.tv_usec / 1000;
-#endif
-
-    return current_time;
-}
 
 static int log_level = LOGLEVEL_ERROR;
 static const size_t BUF_LEN = 8192;
@@ -153,6 +130,21 @@ void FatalLog(const char* format, ...) {
     }
 }
     
+int64_t GetCurrentTime(){
+    int64_t current_time = 0;
+#if __cplusplus >= 201103 || _MSC_VER >= 1800
+    auto tp = std::chrono::system_clock::from_time_t(0);
+    auto now = std::chrono::system_clock::now();
+    auto d = std::chrono::duration_cast<std::chrono::milliseconds>(now - tp);
+    current_time = d.count();
+#else
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    current_time = (int64_t)tv.tv_sec * 1000 + tv.tv_usec / 1000;
+#endif
+
+    return current_time;
+}
 
 
 int main(){
