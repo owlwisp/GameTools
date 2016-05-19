@@ -1,3 +1,5 @@
+// 分级日志系统
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
