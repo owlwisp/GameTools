@@ -100,12 +100,12 @@ public:
 	
 };
 
-std::function<bool(int a )> getB(int a,int b){
+std::function<bool(int )> getB(int a,int b){
 	B t(a,b);
 	return std::bind(&B::operator (),t,std::placeholders::_1);
 }
 
-std::function<bool(int a )> getC(int a,int b){
+std::function<bool(int)> getC(int a,int b){
 	C t(a,b);
 	return std::bind(&C::operator (),t,std::placeholders::_1);
 
