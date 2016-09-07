@@ -113,7 +113,7 @@ std::function<bool(int)> getC(int a,int b){
 
 class M{
 public:
-	typedef std::function<bool(int a )> Func;
+	typedef std::function<bool(int)> Func;
 
 	Func func;
 };
